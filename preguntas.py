@@ -11,7 +11,16 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
-
+def read_file():
+    filename = "data.csv"
+    with open(filename, mode='r') as file:
+        data = file.readlines()    
+    listaData = []
+    for row in data:
+        listaData.append(row.split('\t'))
+    return listaData
+    
+    
 
 def pregunta_01():
     """
@@ -21,7 +30,8 @@ def pregunta_01():
     214
 
     """
-    return
+    data = read_file()
+    return sum([int(row[1]) for row in data])
 
 
 def pregunta_02():
@@ -39,7 +49,14 @@ def pregunta_02():
     ]
 
     """
-    return
+    dic = {"A":0, "B":0, "C":0, "D":0, "E":0}
+    data = read_file()
+    for row in data:
+        try:
+            dic[row[0]] = dic[row[0]] + 1
+        except:
+            pass
+    return sorted(list(dic.items()))
 
 
 def pregunta_03():
@@ -57,7 +74,14 @@ def pregunta_03():
     ]
 
     """
-    return
+    dic = {"A":0, "B":0, "C":0, "D":0, "E":0}
+    data = read_file()
+    for row in data:
+        try:
+            dic[row[0]] = dic[row[0]] + int(row[1])
+        except:
+            pass
+    return sorted(list(dic.items()))
 
 
 def pregunta_04():
@@ -82,7 +106,15 @@ def pregunta_04():
     ]
 
     """
-    return
+    mes = {}
+    data = read_file()
+    for row in data:
+        m = row[2].split('-')[1]
+        if m not in mes:
+            mes[m] = 1
+        else:
+            mes[m] += 1
+    return sorted(list(mes.items()))
 
 
 def pregunta_05():
@@ -100,7 +132,18 @@ def pregunta_05():
     ]
 
     """
-    return
+    dic = {}
+    rta = []
+    data = read_file()
+    for row in data:
+        m = row[0]
+        if m not in dic:
+            dic[m] = [int(row[1])]
+        else:
+            dic[m].append(int(row[1]))
+    for k, v in dic.items():
+        rta.append((k, max(v), min(v)))
+    return sorted(rta)
 
 
 def pregunta_06():
@@ -125,7 +168,15 @@ def pregunta_06():
     ]
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        for dat in row[4].split(','):
+            k, v = dat.split(':')
+            if k not in dic:
+                dic[k]=[]
+            dic[k].append(int(v))   
+    return sorted([(k, min(v), max(v)) for k, v in dic.items()])
 
 
 def pregunta_07():
@@ -149,7 +200,14 @@ def pregunta_07():
     ]
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        n = int(row[1])
+        if n not in dic:
+            dic[n] = []
+        dic[n].append(row[0])
+    return sorted(list(dic.items()))
 
 
 def pregunta_08():
@@ -174,7 +232,16 @@ def pregunta_08():
     ]
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        n = int(row[1])
+        if n not in dic:
+            dic[n] = []
+        if row[0] not in dic[n]:
+            dic[n].append(row[0])
+            dic[n] = sorted(dic[n])
+    return sorted(list(dic.items()))
 
 
 def pregunta_09():
@@ -197,7 +264,16 @@ def pregunta_09():
     }
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        for dat in row[4].split(','):
+            k, v = dat.split(':')
+            if k not in dic:
+                dic[k] = 0
+            dic[k] += 1
+    keys = sorted(dic)
+    return {i:dic[i] for i in keys}
 
 
 def pregunta_10():
@@ -218,7 +294,9 @@ def pregunta_10():
 
 
     """
-    return
+    
+    data = read_file()
+    return [(row[0], len(row[3].split(',')), len(row[4].split(','))) for row in data]
 
 
 def pregunta_11():
@@ -239,7 +317,16 @@ def pregunta_11():
 
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        n = int(row[1])
+        for letter in row[3].split(','):
+            if letter not in dic:
+                dic[letter] = 0
+            dic[letter] += n
+    keys = sorted(dic)
+    return {i:dic[i] for i in keys}
 
 
 def pregunta_12():
@@ -257,4 +344,12 @@ def pregunta_12():
     }
 
     """
-    return
+    dic = {}
+    data = read_file()
+    for row in data:
+        if row[0] not in dic:
+            dic[row[0]] = 0 
+        c5 = row[4].split(',')
+        dic[row[0]] += sum([int(i.split(':')[1]) for i in c5])
+    keys = sorted(dic)
+    return {i:dic[i] for i in keys}
